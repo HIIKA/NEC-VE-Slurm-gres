@@ -52,6 +52,7 @@
 bool     backfill_busy_nodes  = false;
 int      bf_window_scale      = 0;
 cons_common_callbacks_t cons_common_callbacks = {0};
+int      core_array_size      = 1;
 uint16_t cr_type              = CR_CPU; /* cr_type is overwritten in init() */
 bool     gang_mode            = false;
 bool     have_dragonfly       = false;
@@ -795,6 +796,9 @@ extern int common_node_init(struct node_record *node_ptr, int node_cnt)
 		error("select_p_node_init: node_cnt < 0");
 		return SLURM_ERROR;
 	}
+
+	if (is_cons_tres)
+		core_array_size = select_node_cnt;
 
 	sched_params = slurm_get_sched_params();
 	if (xstrcasestr(sched_params, "preempt_strict_order"))
