@@ -149,6 +149,7 @@ Main:
 	    # deal w/ specific types of gres
 	    my $gpus = 0;
 	    my $mics = 0;
+	    my $ves = 0;
 	    if ( defined $gres ) {
                   my @gres = split(/,/,$gres);
                   foreach my $grestype ( @gres ) {
@@ -166,6 +167,14 @@ Main:
 					$mics += int($elt[1]);
 			        } else {
 					$mics += int($elt[2]);
+				}
+
+			  }
+			  if ( $#elt>0 && $elt[0] eq "ve" ) {
+				if ( $elt[1] =~ /^[0-9]+$/ ) {
+					$ves += int($elt[1]);
+			        } else {
+					$ves += int($elt[2]);
 				}
 
 			  }
@@ -230,6 +239,7 @@ Main:
 		    printf "    note = %s\n", $reason if defined $reason;
 		    printf "    gpus = %d\n", $gpus if $gpus>0;
 		    printf "    mics = %d\n", $mics if $mics>0;
+		    printf "    ves = %d\n", $ves if $ves>0;
 	            print "\n";
 	     } else {
 	            if ( $state =~ /drained|down/i ) {
