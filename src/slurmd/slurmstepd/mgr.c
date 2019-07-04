@@ -1302,16 +1302,19 @@ job_manager(stepd_step_rec_t *job)
 	}
 	if (!job->batch && (job->node_tasks > 1) &&
 	    (job->accel_bind_type || job->tres_bind)) {
-		uint64_t gpu_cnt, mic_cnt, nic_cnt;
-		gpu_cnt = gres_plugin_step_count(job->step_gres_list, "gpu");
-		mic_cnt = gres_plugin_step_count(job->step_gres_list, "mic");
-		nic_cnt = gres_plugin_step_count(job->step_gres_list, "nic");
+		uint64_t gpu_cnt, mic_cnt, nic_cnt, ve_cnt;
+		gpu_cnt    = gres_plugin_step_count(job->step_gres_list, "gpu");
+		mic_cnt    = gres_plugin_step_count(job->step_gres_list, "mic");
+		nic_cnt    = gres_plugin_step_count(job->step_gres_list, "nic");
+		ve_cnt     = gres_plugin_step_count(job->step_gres_list, "ve");
 		if ((gpu_cnt <= 1) || (gpu_cnt == NO_VAL64))
 			job->accel_bind_type &= (~ACCEL_BIND_CLOSEST_GPU);
 		if ((mic_cnt <= 1) || (mic_cnt == NO_VAL64))
 			job->accel_bind_type &= (~ACCEL_BIND_CLOSEST_MIC);
 		if ((nic_cnt <= 1) || (nic_cnt == NO_VAL64))
 			job->accel_bind_type &= (~ACCEL_BIND_CLOSEST_NIC);
+		if ((ve_cnt <= 1) || (ve_cnt == NO_VAL64))
+			job->accel_bind_type &= (~ACCEL_BIND_CLOSEST_VE);
 		if (job->accel_bind_type == ACCEL_BIND_VERBOSE)
 			job->accel_bind_type = 0;
 	}

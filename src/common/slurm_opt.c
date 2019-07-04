@@ -365,6 +365,8 @@ static int arg_set_accel_bind_type(slurm_opt_t *opt, const char *arg)
 		opt->srun_opt->accel_bind_type |= ACCEL_BIND_CLOSEST_MIC;
 	if (strchr(arg, 'n'))
 		opt->srun_opt->accel_bind_type |= ACCEL_BIND_CLOSEST_NIC;
+	if (strchr(arg, 'a'))
+		opt->srun_opt->accel_bind_type |= ACCEL_BIND_CLOSEST_VE;
 
 	if (!opt->srun_opt->accel_bind_type) {
 		error("Invalid --accel-bind specification");
@@ -388,6 +390,8 @@ static char *arg_get_accel_bind_type(slurm_opt_t *opt)
 		xstrcat(tmp, "m");
 	if (opt->srun_opt->accel_bind_type & ACCEL_BIND_CLOSEST_NIC)
 		xstrcat(tmp, "n");
+	if (opt->srun_opt->accel_bind_type & ACCEL_BIND_CLOSEST_VE)
+		xstrcat(tmp, "a");
 
 	return tmp;
 }
